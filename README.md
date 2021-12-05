@@ -1,8 +1,8 @@
-# Custom Search make with ReactJS
+# Custom Search with ReactJS
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Setup
+## Setup and init
 
 ### `yarn`
 

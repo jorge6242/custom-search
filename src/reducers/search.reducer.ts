@@ -4,6 +4,7 @@ import {
   getGoogleSearchheaders,
 } from "../helpers/headers";
 import { IDispatch } from "../interfaces/IDispatch";
+import { BING_URL, GOOGLE_URL } from "../utils/constants";
 
 const GET_SEARCH = "search/get_search";
 const GET_BING_SEARCH = "search/get_bing_search";
@@ -73,10 +74,9 @@ export const getGoogleSearch =
       payload: true,
     });
     try {
-      const { data } = await axios.get(
-        `https://google-search3.p.rapidapi.com/api/v1/search/q=${term}&num=${num}`,
-        { headers: getGoogleSearchheaders() }
-      );
+      const { data } = await axios.get(`${GOOGLE_URL}/q=${term}&num=${num}`, {
+        headers: getGoogleSearchheaders(),
+      });
       const response: GoogleSearchResponse = data;
       dispatch({
         type: GET_SEARCH,
@@ -105,10 +105,9 @@ export const getBingSearch =
       payload: true,
     });
     try {
-      const { data } = await axios.get(
-        `https://api.bing.microsoft.com/v7.0/search?q=${term}`,
-        { headers: getBingSearchHeaders() }
-      );
+      const { data } = await axios.get(`${BING_URL}/search?q=${term}`, {
+        headers: getBingSearchHeaders(),
+      });
       const response: BingSearchResponse = data;
       const newList = response.webPages.value.map((e) => ({
         title: e.name,
@@ -144,20 +143,15 @@ export const getBothSearch =
       payload: true,
     });
     try {
-      const googleRes = await axios.get(
-        `https://google-search3.p.rapidapi.com/api/v1/search/q=${term}&num=${num}`,
-        { headers: getGoogleSearchheaders() }
-      );
+      const googleRes = await axios.get(`${GOOGLE_URL}/q=${term}&num=${num}`, {
+        headers: getGoogleSearchheaders(),
+      });
+
+      const bingRes = await axios.get(`${BING_URL}/search?q=${term}`, {
+        headers: getBingSearchHeaders(),
+      });
       const googleData: GoogleSearchResponse = googleRes.data;
-
-      const bingRes = await axios.get(
-        `https://api.bing.microsoft.com/v7.0/search?q=${term}`,
-        { headers: getBingSearchHeaders() }
-      );
       const bingData: BingSearchResponse = bingRes.data;
-
-      console.log("googleData ", googleData);
-      console.log("bingData ", bingData);
 
       const newBingList = bingData.webPages.value.map((e) => ({
         title: e.name,
